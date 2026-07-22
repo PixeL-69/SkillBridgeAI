@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { askGemini } from "../services/gemini";
 import ReactMarkdown from "react-markdown";
 import { HiMenu, HiX } from "react-icons/hi";
-import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import Footer from "../components/Footer";
 
 function Chat() {
@@ -255,7 +254,7 @@ Instructions:
 
       {/* Messages */}
 
-      <div className="flex-1 p-4 md:p-8 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6">
 {messages.length === 0 && (
   <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 max-w-[90%] md:max-w-xl mb-6">
 
@@ -356,54 +355,7 @@ Instructions:
 
       {/* Input */}
 
-      <footer className="border-t border-slate-800 py-4 px-6 text-center text-sm text-slate-400">
-  <p>
-    Helping students bridge the gap between learning and landing their dream careers.
-  </p>
-
-  <p className="mt-2">
-    Built with{" "}
-    <span className="text-cyan-400">React</span> •{" "}
-    <span className="text-cyan-400">Tailwind CSS</span> •{" "}
-    <span className="text-cyan-400">Google Gemini AI</span>
-  </p>
-
-  <div className="flex justify-center gap-5 mt-4 text-xl">
-    <a
-      href="https://github.com/PixeL-69"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="transform transition-all duration-200 hover:scale-125 hover:text-cyan-400"
-    >
-      <FaGithub />
-    </a>
-
-    <a
-      href="https://www.linkedin.com/in/swayam-kumar-swain-6ab052296/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="transform transition-all duration-200 hover:scale-125 hover:text-cyan-400"
-    >
-      <FaLinkedin />
-    </a>
-    <a
-    href="https://instagram.com/swayhehe19"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="transform transition-all duration-200 hover:scale-125 hover:text-cyan-400"
-    aria-label="Instagram"
-  >
-    <FaInstagram />
-  </a>
-  </div>
-
-  <p className="mt-4">
-    © 2026 SkillBridge AI • Developed by{" "}
-    <span className="text-cyan-400 font-medium">
-      Swayam Kumar Swain
-    </span>
-  </p>
-</footer>
+     
 
       <div className="border-t border-slate-800 p-4 md:p-6">
 
