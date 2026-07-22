@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+body{
+  font-family: 'Poppins', sans-serif;
+}
+
+@keyframes float {
+
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-30px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(1);
+    opacity: .6;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: .6;
+  }
+}
+
+.animate-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes rotateSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-rotate {
+  animation: rotateSlow 18s linear infinite;
+}
+
+@keyframes bounceSlow {
+  0%,100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 5s ease-in-out infinite;
+}
+.animate-spin-slow {
+  animation: rotateSlow 25s linear infinite;
+}
+
+.animate-float {
+
+  animation: float 7s ease-in-out infinite;
+
+}
