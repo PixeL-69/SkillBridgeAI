@@ -2,7 +2,7 @@ import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className="border-t border-slate-800 bg-slate-950 mt-16 py-10 px-6  text-center text-sm text-slate-400">
+    <footer className="border-t border-slate-800 bg-slate-950 py-10 px-6 text-center text-sm text-slate-400">
         <hr className="border-slate-800 mb-6" />
       <p>
         Helping students bridge the gap between learning and landing their dream careers.

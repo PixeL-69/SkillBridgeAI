@@ -74,7 +74,7 @@ function Features() {
   return (
   <section
     id="features"
-    className="relative overflow-hidden bg-gradient-to-b from-slate-950 to-black text-white py-24 px-8"
+     className="relative overflow-hidden bg-gradient-to-b from-slate-950 to-slate-950 text-white py-20 px-8"
   >
     <div className="absolute left-20 top-20 h-72 w-72 rounded-full bg-cyan-500/10 blur-[140px]"></div>
     <div className="absolute right-20 bottom-10 h-96 w-96 rounded-full bg-purple-500/10 blur-[170px]"></div>
