@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { askGemini } from "../services/gemini";
-import { createConversation } from "../utils/conversationManager";
+import {
+  createConversation,
+  loadConversations,
+  saveConversations,
+  loadActiveConversation,
+  saveActiveConversation,
+} from "../utils/conversationManager";
 import { HiMenu, HiX } from "react-icons/hi";
 import WelcomeCard from "../components/WelcomeCard";
 import MessageBubble from "../components/MessageBubble";
@@ -31,19 +37,43 @@ function Chat() {
     }
   }, []);
   useEffect(() => {
-  const firstConversation = createConversation();
+  const savedConversations = loadConversations();
 
-  setConversations([firstConversation]);
-  setActiveConversationId(firstConversation.id);
+  if (savedConversations.length > 0) {
+    setConversations(savedConversations);
+   const lastActive = loadActiveConversation();
+
+const activeExists = savedConversations.some(
+  (conversation) => conversation.id === lastActive
+);
+
+setActiveConversationId(
+  activeExists ? lastActive : savedConversations[0].id
+);
+  } else {
+    const firstConversation = createConversation();
+
+    setConversations([firstConversation]);
+    setActiveConversationId(firstConversation.id);
+  }
 }, []);
+
+useEffect(() => {
+  if (conversations.length > 0) {
+    saveConversations(conversations);
+  }
+}, [conversations]);
   useEffect(() => {
   messagesEndRef.current?.scrollIntoView({
     behavior: "smooth",
   });
 }, [messages, isLoading]);
+useEffect(() => {
+  if (activeConversationId) {
+    saveActiveConversation(activeConversationId);
+  }
+}, [activeConversationId]);
 const handleClearChat = () => {
-  if (window.confirm("Are you sure you want to clear this conversation?")) {
-    const handleClearChat = () => {
   if (!window.confirm("Are you sure you want to clear this conversation?")) {
     return;
   }
@@ -51,10 +81,6 @@ const handleClearChat = () => {
   updateActiveConversation([]);
   setMessage("");
   inputRef.current?.focus();
-};
-    setMessage("");
-    inputRef.current?.focus();
-  }
 };
 
 const handleNewChat = () => {
