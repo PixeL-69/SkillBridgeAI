@@ -2,17 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import { askGemini } from "../services/gemini";
 import ReactMarkdown from "react-markdown";
 import { HiMenu, HiX } from "react-icons/hi";
-import Footer from "../components/Footer";
+
 
 function Chat() {
 const [sidebarOpen, setSidebarOpen] = useState(false);
 const [user, setUser] = useState(null);
 const [message, setMessage] = useState("");
 const [messages, setMessages] = useState([]);
+
+
 const [isLoading, setIsLoading] = useState(false);
 const [copiedIndex, setCopiedIndex] = useState(null);
 const messagesEndRef = useRef(null);
 const inputRef = useRef(null);
+useEffect(() => {
+  console.log(conversations);
+}, [conversations]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("skillbridgeUser");
@@ -33,6 +38,7 @@ const handleClearChat = () => {
     inputRef.current?.focus();
   }
 };
+
 const handleNewChat = () => {
   if (
     messages.length === 0 ||
@@ -227,13 +233,14 @@ Instructions:
 
     <div>
       <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
-        Welcome back{user ? `, ${user.name}` : ""}! 👋
+        Hello{user ? `, ${user.name.split(" ")[0]}` : ""}! 👋
       </h1>
 
       <p className="text-slate-400 mt-3 text-sm md:text-base leading-relaxed">
         {user
-          ? `You're a ${user.year} pursuing ${user.degree} at ${user.college}, aiming to become a ${user.goal} at ${user.company}.`
-          : "Loading profile..."}
+  ? `Let's build your path to becoming a ${user.goal}.`
+  : "Loading profile..."
+}
       </p>
     </div>
   </div>
@@ -260,17 +267,20 @@ Instructions:
   <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 max-w-[90%] md:max-w-xl mb-6">
 
     <p className="text-cyan-400 font-semibold">
-      SkillBridge AI
+      SkillBridge AI ✨
     </p>
 
-    <p className="mt-3 text-slate-300">
-      👋 Hi! I'm your AI Career Mentor.
-
-      I can help you build a roadmap, improve your resume,
-      prepare for interviews, learn new skills,
-      and answer career-related questions.
-
-      What would you like to do today?
+    <p className="mt-3 text-slate-300 leading-6">
+      Hello! I'm your AI Career Companion.
+  <br />
+  <br />
+  I'm here to help you build the skills, confidence, and experience you need
+  to achieve your career goals.
+  <br />
+  <br />
+  <span className="font-medium text-white">
+    What would you like to work on today?
+  </span>
     </p>
 
   </div>
@@ -391,7 +401,7 @@ Instructions:
         </div>
 
       </div>
-     <Footer />
+     
     </div>
 
   </div>
