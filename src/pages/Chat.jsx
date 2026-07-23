@@ -254,7 +254,8 @@ Instructions:
 
       {/* Messages */}
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6"
+      >
 {messages.length === 0 && (
   <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 md:p-6 max-w-[90%] md:max-w-xl mb-6">
 

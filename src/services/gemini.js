@@ -7,13 +7,13 @@ const ai = new GoogleGenAI({
 export async function askGemini(prompt) {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-flash-latest",
       contents: prompt,
     });
 
     return response.text;
   } catch (error) {
-    console.error(error);
-    throw error;
+    console.error("Gemini Error:", error);
+    throw new Error("Failed to generate response.");
   }
 }
