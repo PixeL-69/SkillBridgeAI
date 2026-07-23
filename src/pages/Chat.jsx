@@ -1,21 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { askGemini } from "../services/gemini";
-
+import { createConversation } from "../utils/conversationManager";
 import { HiMenu, HiX } from "react-icons/hi";
 import WelcomeCard from "../components/WelcomeCard";
 import MessageBubble from "../components/MessageBubble";
 function Chat() {
-const [sidebarOpen, setSidebarOpen] = useState(false);
-const [user, setUser] = useState(null);
-const [message, setMessage] = useState("");
-const [messages, setMessages] = useState([]);
+ const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [message, setMessage] = useState("");
 
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState(null);
 
-const [isLoading, setIsLoading] = useState(false);
-const [copiedIndex, setCopiedIndex] = useState(null);
-const messagesEndRef = useRef(null);
-const inputRef = useRef(null);
+  const activeConversation = conversations.find(
+    (conversation) => conversation.id === activeConversationId
+  );
 
+  const messages = activeConversation?.messages || [];
+
+  const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("skillbridgeUser");
@@ -25,13 +31,27 @@ const inputRef = useRef(null);
     }
   }, []);
   useEffect(() => {
+  const firstConversation = createConversation();
+
+  setConversations([firstConversation]);
+  setActiveConversationId(firstConversation.id);
+}, []);
+  useEffect(() => {
   messagesEndRef.current?.scrollIntoView({
     behavior: "smooth",
   });
 }, [messages, isLoading]);
 const handleClearChat = () => {
   if (window.confirm("Are you sure you want to clear this conversation?")) {
-    setMessages([]);
+    const handleClearChat = () => {
+  if (!window.confirm("Are you sure you want to clear this conversation?")) {
+    return;
+  }
+
+  updateActiveConversation([]);
+  setMessage("");
+  inputRef.current?.focus();
+};
     setMessage("");
     inputRef.current?.focus();
   }
@@ -39,13 +59,32 @@ const handleClearChat = () => {
 
 const handleNewChat = () => {
   if (
-    messages.length === 0 ||
-    window.confirm("Start a new conversation?")
+    messages.length > 0 &&
+    !window.confirm("Start a new conversation?")
   ) {
-    setMessages([]);
-    setMessage("");
-    inputRef.current?.focus();
+    return;
   }
+
+  const newConversation = createConversation();
+
+  setConversations((prev) => [...prev, newConversation]);
+  setActiveConversationId(newConversation.id);
+
+  setMessage("");
+  inputRef.current?.focus();
+};
+const updateActiveConversation = (updatedMessages) => {
+  setConversations((prev) =>
+    prev.map((conversation) =>
+      conversation.id === activeConversationId
+        ? {
+            ...conversation,
+            messages: updatedMessages,
+            updatedAt: new Date().toISOString(),
+          }
+        : conversation
+    )
+  );
 };
 const copyToClipboard = async (text, index) => {
   try {
@@ -77,12 +116,14 @@ if (!user) {
   };
 
   // Show the user's message immediately
-  setMessages((prev) => [...prev, userMessage]);
+ const updatedMessages = [...messages, userMessage];
+
+updateActiveConversation(updatedMessages);
 
   // Clear the input box
   setMessage("");
   
-  const history = [...messages, userMessage]
+  const history = updatedMessages
   .slice(-10)
   .map((msg) => {
     return `${msg.sender === "user" ? "User" : "Assistant"}:
@@ -131,18 +172,18 @@ Instructions:
     text: reply,
   };
 
-  setMessages((prev) => [...prev, aiMessage]);
+ updateActiveConversation([...updatedMessages, aiMessage]);
 
 } catch (error) {
   console.error("Gemini Error:", error);
 
-  setMessages((prev) => [
-    ...prev,
-    {
-      sender: "ai",
-      text: "Sorry, something went wrong while contacting Gemini.",
-    },
-  ]);
+  updateActiveConversation([
+  ...updatedMessages,
+  {
+    sender: "ai",
+    text: "Sorry, something went wrong while contacting Gemini.",
+  },
+]);
 
 } finally {
   setIsLoading(false);
@@ -191,22 +232,20 @@ Instructions:
 
 </div>
 
-      <div className="flex-1 p-4 md:p-6 space-y-4">
-        <button className="w-full text-left p-3 rounded-xl hover:bg-slate-800">
-          📈 Career Blueprint
-        </button>
-
-        <button className="w-full text-left p-3 rounded-xl hover:bg-slate-800">
-          📄 Resume Review
-        </button>
-
-        <button className="w-full text-left p-3 rounded-xl hover:bg-slate-800">
-          🎤 Interview Coach
-        </button>
-
-        <button className="w-full text-left p-3 rounded-xl hover:bg-slate-800">
-          💬 Chat History
-        </button>
+      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      {conversations.map((conversation) => (
+  <button
+    key={conversation.id}
+    onClick={() => setActiveConversationId(conversation.id)}
+    className={`w-full text-left p-3 rounded-xl transition ${
+      activeConversationId === conversation.id
+        ? "bg-cyan-600"
+        : "hover:bg-slate-800"
+    }`}
+  >
+    {conversation.title}
+  </button>
+))}
       </div>
 
     </div>
