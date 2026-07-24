@@ -204,12 +204,12 @@ Instructions:
   console.error("Gemini Error:", error);
 
   updateActiveConversation([
-  ...updatedMessages,
-  {
-    sender: "ai",
-    text: "Sorry, something went wrong while contacting Gemini.",
-  },
-]);
+    ...updatedMessages,
+    {
+      sender: "ai",
+      text: error.message,
+    },
+  ]);
 
 } finally {
   setIsLoading(false);
